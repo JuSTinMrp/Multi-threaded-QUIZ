@@ -1,0 +1,10 @@
+
+# Function to handle a client connection
+def handle_client(client_socket):
+    # Send a quiz question to the client
+    question = "What is the capital of France?"
+    client_socket.send(question.encode())
+
+    # Receive the client's answer
+    answer = client_socket.recv(1024).decode()
+    print(f'Client answered: {answer}')
