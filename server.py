@@ -3,7 +3,7 @@ import socket
 import threading
 
 # IP and port number
-SERVER_HOST = '192.168.184.210'
+SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 7878
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,7 +31,7 @@ def handle_client(client_socket):
 
 while True:
     client, addr = server_socket.accept()
-    print(f'Accepted connection from {addr[0]}:{addr[1]} & USERNAME: {}')
+    print(f'Accepted connection from {addr[0]}:{addr[1]}')
     clients.append(client)
 
     # To join next client
