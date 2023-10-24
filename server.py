@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # modules
 import socket
 import threading
@@ -12,7 +14,7 @@ server_socket.bind((SERVER_HOST, SERVER_PORT))
 server_socket.listen(5)
 
 
-clients = {}
+clients = []
 
 # QUESTIONS
 data = [
@@ -68,6 +70,7 @@ while True:
     client, addr = server_socket.accept()
     print(f'Accepted connection from {addr[0]}:{addr[1]}')
     clients.append(client)
+    # clients['client'].append(client)
 
     # To join next client
     client_handler = threading.Thread(target=handle_client, args=(client,))
