@@ -12,8 +12,22 @@ server_socket.bind((SERVER_HOST, SERVER_PORT))
 server_socket.listen(5)
 
 
-clients = []
+clients = {}
 
+# QUESTIONS
+data = [
+    {
+        'question': 'Testing Question 1?',
+        'options': ['a) a', 'b) b', 'c) c', 'd) d'],
+        'correct_answer': 'c'
+    },
+    {
+        'question': 'Testing Question 2?',
+        'options': ['a) a', 'b) b', 'c) c', 'd) d'],
+        'correct_answer': 'b'
+    },
+    
+]
 
 def handle_client(client_socket):
     
@@ -25,23 +39,30 @@ def handle_client(client_socket):
     print (clients)
 
     user_file = f'{username}.txt'
+    ans_file = f'{username}_ans.txt'
     
-    # PUT QUESTIONS HERE...!!!
-    question = "Testing Question 1?"
-    client_socket.send(question.encode())
+    
+    for question_data in data:
+        
+        question_with_options = f"{question_data['question']} [{', '.join(question_data['options'])}]"
+        client_socket.send(question_with_options.encode())
+
+        
+        answer = client_socket.recv(1024).decode()
+        print(f'{username} answered: {answer}')
+
+        
+        with open(user_file, 'a') as file:
+            file.write(f'Question: {question_data["question"]}\nAnswer: {answer}\nCorrect Answer: {question_data["correct_answer"]}\n\n')
+
+        with open(ans_file, 'a') as file:
+            file.write(f'{answer}\n')
 
 
-    answer = client_socket.recv(1024).decode()
-    print(f'{username} answered: {answer}')
-    # print(f'Client answered: {answer}')
-    
-    with open(user_file, 'a') as file:
-        file.write(f'Question: {question}\nAnswer: {answer}\n\n')
-    
     client_socket.close()
     clients.remove(client_socket)
     del clients[username]
-
+    file.close()
 
 while True:
     client, addr = server_socket.accept()

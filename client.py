@@ -7,16 +7,19 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((SERVER_HOST, SERVER_PORT))
 
 
-question = client_socket.recv(1024).decode()
-
-# need to add question number 
-
-
-
-print(f'Question: {question}')
-
-
-answer = input("Your answer: ")
-client_socket.send(answer.encode())
+while True:
+    question = client_socket.recv(1024).decode()
+    if not question:
+        break
+    print(f'Question: {question}', end=' ')
+    
+    
+    for _ in range(4):
+        option = client_socket.recv(1024).decode()
+        print(option, end=' ')
+    
+    
+    answer = input("\nAnswer: ")
+    client_socket.send(answer.encode())
 
 client_socket.close()
