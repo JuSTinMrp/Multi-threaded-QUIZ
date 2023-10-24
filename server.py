@@ -7,7 +7,7 @@ import os
 
 # IP and port number
 SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 7878
+SERVER_PORT = 7979
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((SERVER_HOST, SERVER_PORT))
@@ -73,7 +73,7 @@ while True:
     # clients['client'].append(client)
 
     # To join next client
-    client_handler = threading.Thread(target=handle_client, args=(client,))
+    client_handler = threading.Thread(target=handle_client(client))
     client_handler.start()
 
 

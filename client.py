@@ -3,13 +3,17 @@
 import socket
 
 SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 7878
+SERVER_PORT = 7979
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((SERVER_HOST, SERVER_PORT))
 
 
 while True:
+    
+    name = client_socket.recv(1024).decode()
+    
+    
     question = client_socket.recv(1024).decode()
     if not question:
         break
