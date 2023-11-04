@@ -14,7 +14,8 @@ while True:
 
     name = input()
     client_socket.send(name.encode())    
-        
+    client_socket.close()
+    break
     # question = client_socket.recv(1024).decode()
     # if not question:
     #     break
@@ -29,4 +30,4 @@ while True:
     # answer = input("\nAnswer: ")
     # client_socket.send(answer.encode())
 
-client_socket.close()
+# client_socket.close()
