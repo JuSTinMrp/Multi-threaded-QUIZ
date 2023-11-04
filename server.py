@@ -41,7 +41,7 @@ def handle_client(client_socket):
     print (clients)
 
     user_file = f'{username}.txt'
-    ans_file = f'{username}_ans.txt'
+    # ans_file = f'{username}_ans.txt'
     
     
     for question_data in data:
@@ -57,8 +57,8 @@ def handle_client(client_socket):
         with open(user_file, 'a') as file:
             file.write(f'Question: {question_data["question"]}\nAnswer: {answer}\nCorrect Answer: {question_data["correct_answer"]}\n\n')
 
-        with open(ans_file, 'a') as file:
-            file.write(f'{answer}\n')
+        # with open(ans_file, 'a') as file:
+        #     file.write(f'{answer}\n')
 
 
     client_socket.close()
