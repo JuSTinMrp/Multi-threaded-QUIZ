@@ -1,44 +1,28 @@
-
-# Function to handle a client connection
-def handle_client(client_socket):
-    # Send a quiz question to the client
-    question = "What is the capital of France?"
-    client_socket.send(question.encode())
-
-    # Receive the client's answer
-    answer = client_socket.recv(1024).decode()
-    print(f'Client answered: {answer}')
+need to do:
+    - banner -x
+    - enter to confirm or re-answer
+    - standalone executable conversion -x
 
 
+print('''
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒▓█▓▒▓█▓▒▓█░░░░░
+░░░░░░░░░CREATED BY░░░░░░░░░░░░▓█▓▒▒░░▒░░░░░▒██▒░░
+░░░░░░░░░░░@JuSTinMrp░░░░░░▒▓█▓░░░░░░░░░░░░░░██▓░░
+░░░░░░░░░░░@Vishallas░░░░░░██▒░▓▓░░░░▒▓░░░░░░░██▒░
+░░░░░░░░░░░░░░░░░░░░░░░░░░▓█▓░░░░░░░░░░░░░░░░░▓█▓░
+░░░░░░░░░░░░░░░░░░░░░░░░░░██▒░░░▒░░░░░░░░░░░░░██▓░
+░░░░░░░░░░░░░░░░░░░░░░░░░░▓█▒░░░▒█▓▓██▒░░░░░░▒██░░
+░░░░░░░░░░░▒▒▓▒▒▒▒▓▓▓▓▒░░░░██▒░░░░░░░░░░░░░░▒██░░░
+░░░░░░░░░░▓▓▒▒▒▓▓▓▓▒▒▒▒▒░░░░▒██▓▒▒░░░░▒▒▓▓██▓░░░░░
+░░░░░░░░░▒▓▒▒▒▒▒▓▓▓▓▒▒▒▒▒░░░░░░▒▒▒███▒▒▒▒░░░░░░░░░
+░░░░░░░░░░░▒▒▓▓▒▒▓▓▒▒▒▒▓░░░░░░░░░░██▒░░░░░░░░░░░░░
+░░░░░░░░░░░░░▒▒▒▒▓▓▓▓▓▓▓▒▒░░░░░░░▒██░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░▒█▓▒▒░▒▓▓███▓▒▒▒▓█▓░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓▓███▓░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░████▒░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░▓█▓░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░░██▒░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░░░██▒░░░░░░░░░
+''')
 
-# Function to handle a client connection
-def handle_client(client_socket):
-    # Request and store the username
-    client_socket.send("Enter your username: ".encode())
-    username = client_socket.recv(1024).decode()
-    print(f'{username} connected')
-
-    # Create a text file for the user
-    user_file = f'{username}.txt'
-
-    # Send a quiz question to the client
-    question = "What is the capital of France?"
-    client_socket.send(question.encode())
-
-    # Receive the client's answer
-    answer = client_socket.recv(1024).decode()
-    print(f'{username} answered: {answer}')
-
-    # Store the answer in the user's file
-    with open(user_file, 'a') as file:
-        file.write(f'Question: {question}\nAnswer: {answer}\n\n')
-
-    client_socket.close()
-    del clients[username]
-
-while True:
-    client, addr = server_socket.accept()
-    print(f'Accepted connection from {addr[0]}:{addr[1]}')
-    
-    clients[client] = threading.Thread(target=handle_client, args=(client,))
-    clients[client].start()

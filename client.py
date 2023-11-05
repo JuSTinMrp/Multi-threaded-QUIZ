@@ -2,8 +2,41 @@
 
 import socket
 import json
+import os # for clearing screen
 
+# banner
+
+def banner():
+    print('''
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒▓█▓▒▓█▓▒▓█░░░░░
+            ░░░░░░░░░CREATED BY░░░░░░░░░░░░▓█▓▒▒░░▒░░░░░▒██▒░░
+            ░░░░░░░░░░░@JuSTinMrp░░░░░░▒▓█▓░░░░░░░░░░░░░░██▓░░
+            ░░░░░░░░░░░@Vishallas░░░░░░██▒░▓▓░░░░▒▓░░░░░░░██▒░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░▓█▓░░░░░░░░░░░░░░░░░▓█▓░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░██▒░░░▒░░░░░░░░░░░░░██▓░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░▓█▒░░░▒█▓▓██▒░░░░░░▒██░░
+            ░░░░░░░░░░░▒▒▓▒▒▒▒▓▓▓▓▒░░░░██▒░░░░░░░░░░░░░░▒██░░░
+            ░░░░░░░░░░▓▓▒▒▒▓▓▓▓▒▒▒▒▒░░░░▒██▓▒▒░░░░▒▒▓▓██▓░░░░░
+            ░░░░░░░░░▒▓▒▒▒▒▒▓▓▓▓▒▒▒▒▒░░░░░░▒▒▒███▒▒▒▒░░░░░░░░░
+            ░░░░░░░░░░░▒▒▓▓▒▒▓▓▒▒▒▒▓░░░░░░░░░░██▒░░░░░░░░░░░░░
+            ░░░░░░░░░░░░░▒▒▒▒▓▓▓▓▓▓▓▒▒░░░░░░░▒██░░░░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░▒█▓▒▒░▒▓▓███▓▒▒▒▓█▓░░░░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓▓███▓░░░░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░████▒░░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░▓█▓░░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░░██▒░░░░░░░░░░
+            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░░░██▒░░░░░░░░░
+''')
+    
+# screen clearing 
+def clear_screen():
+    # Clear the screen depending on the OS
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
 def pprint(question):
+    clear_screen()      # clearing and showing banner
+    banner()
     print('\n1) %s\r' % question['question'])
     for i in range(4):
         print(f"[{i+1}] {question['choices'][i]}")
@@ -24,14 +57,20 @@ while True:
     name_prompt = client_socket.recv(1024).decode()
     print(name_prompt, end='')
     
-    name = input()
-    client_socket.send(name.encode())
-    NO_OF_QUES = int(client_socket.recv(1024).decode())
-    for i in range(NO_OF_QUES):
-        data = client_socket.recv(1024).decode()
-        if data != '':
-            question = json.loads(data)
-            choice = pprint(question)
-            client_socket.send(str(choice).encode())
-    client_socket.close()
-    break
+    try:
+        name = input()
+        client_socket.send(name.encode())
+        NO_OF_QUES = int(client_socket.recv(1024).decode())
+        for i in range(NO_OF_QUES):
+            data = client_socket.recv(1024).decode()
+            if data != '':
+                question = json.loads(data)
+                choice = pprint(question)
+                client_socket.send(str(choice).encode())
+        client_socket.close()
+        print("You completed the test... :)")
+        break
+    except KeyboardInterrupt:
+        print("\nYou exited the test... :(")
+        client_socket.close()
+        break

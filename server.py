@@ -8,6 +8,7 @@ import json
 import os #for path -> file creation
 
 
+    
 def convertQtobQ(questions):
     bquestion = {}
     for i,j in questions.items():
@@ -16,45 +17,47 @@ def convertQtobQ(questions):
 
 def handle_client(client_socket,client_addr):
     
-    # Username and file creation
-    user_question="Enter your Name: "
-    client_socket.send(user_question.encode())
-    username = client_socket.recv(1024).decode()
+    try: 
+        # Username and file creation
+        user_question="Enter your Name: "
+        client_socket.send(user_question.encode())
+        username = client_socket.recv(1024).decode()
 
-    # hostname = socket.gethostname()
-    filepath = os.path.join('ans_sheets')
-        
-    if not os.path.exists(filepath):
-        os.makedirs(filepath, exist_ok=True)
-        
-    user_file = os.path.join(filepath, f'{username}.txt')
-    
-    print(f'{username} connected')
-
-    client_socket.send(str(NO_OF_QUES).encode())
-    t_q_IDs = q_IDs.copy()
-    random.shuffle(t_q_IDs)
-
-    for q_ID in random.sample(t_q_IDs,NO_OF_QUES):
-        # json_str = json.dumps(questions[q_ID])
-        # bytes_representation = json_str.encode()
-
-        client_socket.send(bquestion[q_ID])
-        c = int(client_socket.recv(1024).decode())
-        for i, (question, answer, correct_answer) in enumerate(questions, start=1):
-            print(f'{username} answered {answer} for question {questions[q_ID]}.')
- 
-            correct_answer = questions[q_ID]['correct_answer']
+        # hostname = socket.gethostname()
+        filepath = os.path.join('ans_sheets')
             
-            with open(user_file, 'a') as file:
-                file.write(f'Question: {questions[q_ID]["question"]}\nAnswer: {answer}\nCorrect Answer: {correct_answer}\n\n')
-
-
+        if not os.path.exists(filepath):
+            os.makedirs(filepath, exist_ok=True)
+            
+        user_file = os.path.join(filepath, f'{username}.txt')
         
-    client_socket.close()
-    print(f'\n\n{username} Exited...\n\n')
+        print(f'{username} connected')
+
+        client_socket.send(str(NO_OF_QUES).encode())
+        t_q_IDs = q_IDs.copy()
+        random.shuffle(t_q_IDs)
+
+        for q_ID in random.sample(t_q_IDs,NO_OF_QUES):
+            # json_str = json.dumps(questions[q_ID])
+            # bytes_representation = json_str.encode()
+
+            client_socket.send(bquestion[q_ID])
+            c = int(client_socket.recv(1024).decode())
+            # for i, (question, answer, correct_answer) in enumerate(questions, start=1):
+            # print(f'{username} answered {c} for question {questions[q_ID]}.')
+    
+            correct_answer = questions[q_ID]['correct_answer']
+        
+            with open(user_file, 'a') as file:
+                file.write(f'Question: {questions[q_ID]["question"]}\nAnswer: {c}\nCorrect Answer: {correct_answer}\n\n')
 
 
+            
+        client_socket.close()
+        print(f'{username} completed the test...')
+    
+    except KeyboardInterrupt:
+        print(f'\n{username} Exited...\n')
 
 
 # IP and port number
@@ -144,4 +147,3 @@ while True:
     client_thread.start()
 
 
-    
