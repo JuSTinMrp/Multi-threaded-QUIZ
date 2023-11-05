@@ -16,8 +16,8 @@ def handle_client(client_socket):
     print(f'{username} connected')
     # print (clients)
 
-    # user_file = f'{username}.txt'
-    # # ans_file = f'{username}_ans.txt'
+    user_file = f{username}.txt'
+    ans_file = f'{username}_ans.txt'
     
     
     # for question_data in data:
@@ -50,6 +50,7 @@ server_socket.listen(5)
 
 
 client_threads = []
+Connection_count=0
 
 # QUESTIONS
 data = [
@@ -71,6 +72,9 @@ while True:
     client_socket, client_address = server_socket.accept()
     print(f"Accepted connection from {client_address}")
     
+    Connection_count+=1
+    print(f"Total Connection: {Connection_count}")
+    # print(client_threads)
     # Create a new thread to handle the client
     client_thread = threading.Thread(target=handle_client, args=(client_socket,))
     client_threads.append(client_thread)

@@ -1,38 +1,35 @@
 import socket
+import json
 
-# Define the server address and port
-SERVER_ADDRESS = ('127.0.0.1', 12345)
+def pprint(question):
+    print('\n1) %s\r' % question['question'])
+    for i in range(4):
+        print(f"[{i+1}] {question['choices'][i]}")
 
-def main():
-    # Create a socket for the client
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(SERVER_ADDRESS)
+    choice = int(input('\nEnter the choice : ').strip())
 
-    while True:
-        try:
-            data = client_socket.recv(1024).decode('utf-8')
-            if not data:
-                break
-            if data.startswith('QUESTION:'):
-                print(data)  # Display the question
-                options = []
-                while True:
-                    option = client_socket.recv(1024).decode('utf-8')
-                    if not option:
-                        break
-                    options.append(option)
-                for option in options:
-                    print(option)
-                answer = input("Your answer: ").strip().upper()
-                client_socket.send(answer.encode('utf-8'))
-            elif data == 'QUIZ_OVER':
-                print("The quiz is over.")
-                break
-        except Exception as e:
-            print(f"Error in the quiz: {e}")
-            break
+    input('\nConfirm the Choice %d, press enter.' % choice)
 
+    return choice
+
+SERVER_HOST = '127.0.0.1'
+SERVER_PORT = 1111
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((SERVER_HOST, SERVER_PORT))
+
+
+while True:
+    name_prompt = client_socket.recv(1024).decode()
+    print(name_prompt, end='')
+    
+    name = input()
+    client_socket.send(name.encode())
+    NO_OF_QUES = int(client_socket.recv(1024).decode())
+    for i in range(NO_OF_QUES):
+        data = client_socket.recv(1024).decode()
+        if data != '':
+            question = json.loads(data)
+            choice = pprint(question)
+            client_socket.send(str(choice).encode())
     client_socket.close()
-
-if __name__ == "__main__":
-    main()
+    break
