@@ -1,2 +1,6 @@
 # ignored directory
 venv/
+
+ans_sheets/
+test1.py
+test.py
